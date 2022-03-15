@@ -1,0 +1,214 @@
+'Colocando esse código junto com um event change do VBA é possível fazer LAna comunicar automaticamente o professor e os funcionários pertinentes sobre a chegada de algum aluno novo.
+'E, logo em seguida, ela faz a matrícula do mesmo no sistema estadual de matriculas.
+'No caso seria no sistema do Estado de São Paulo, o SED, mas pode ser perfeitamente adaptado para outros estados.
+
+Sub MatricWpp()
+
+    Dim Lana As New Selenium.ChromeDriver
+    Dim keys As New Selenium.keys
+    Dim aluno, atend1, atend2, atend3, professor, msg, hj, contato, number, ra, dg, classe, ano, URL, URL2, URL3, irsolo, irResp1, irResp2 _
+    , irResp3, irResp4, irResp5, irResp6, irResp7, irResp8, irResp9, irResp10 As String
+    
+    aluno = Application.ActiveCell.Offset(0, -6).Value
+    ra = Application.ActiveCell.Offset(0, -4).Value
+    dg = Application.ActiveCell.Offset(0, -3).Value
+    number = Application.ActiveCell.Offset(0, -7).Value
+    classe = Application.ActiveCell.Offset((-number - 1), -4).Value
+    serie = Application.ActiveCell.Offset((-number - 1), -6).Value
+    contato = Application.ActiveCell.Offset((-number - 2), -4).Value
+    professor = Application.ActiveCell.Offset(0, 6).Value
+    ano = left(serie, 1)
+    atend1 = "NAME1"
+    atend2 = "NAME2"
+    atend3 = "NAM3"
+    'msgSair = "Aluno está autorizado a sair com: "
+    msg1 = "Olá, " + professor + ". A(o) aluna(o) " + aluno + " foi matriculada(o) a partir de hoje, " + matric + ". Essa mensagem foi enviada pela L.Ana, a assistente virtual em criação do Lucas."  'Send message "something" to this phone (Brazil)
+    msg2 = "Olá, NAME1." + " A(o) aluna(o) " + aluno + " foi matriculada(o) a partir de hoje, " + matric + " Na sala da " + professor + ", turma do " + serie + ". Essa mensagem foi enviada pela L.Ana, a assistente virtual em criação do Lucas."  'Send message "something" to this phone (Brazil)
+    msg3 = "Olá, NAME2." + " A(o) aluna(o) " + aluno + " foi matriculada(o) a partir de hoje, " + matric + " Na sala da " + professor + ", turma do " + serie + ". Essa mensagem foi enviada pela L.Ana, a assistente virtual em criação do Lucas."  'Send message "something" to this phone (Brazil)
+    msg4 = "Olá, NAME3." + " A(o) aluna(o) " + aluno + " foi matriculada(o) a partir de hoje, " + matric + " Na sala da " + professor + ", turma do " + serie + ". Essa mensagem foi enviada pela L.Ana, a assistente virtual em criação do Lucas."  'Send message "something" to this phone (Brazil)
+    
+    Lana.SetProfile Environ("LOCALAPPDATA") & "\Google\Chrome\User Data"
+    
+    URL = "https://web.whatsapp.com"
+    URL2 = "https://sed.educacao.sp.gov.br/NCA/Matricula/ConsultaMatricula/Index"
+    URL3 = "https://sed.educacao.sp.gov.br/NCA/Inscricao/Inscricao/Index"
+    
+    With Lana
+        .Start
+        .Get URL
+        'Avisar professor e atendentes no whatsapp
+        Application.Wait (Now + TimeValue("00:00:22"))
+        'Localizar contato
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys contato
+        Application.Wait (Now + TimeValue("00:00:02")) 'tempo de execução entra ações
+        'Entrar na conversa
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys (keys.Enter)
+        Application.Wait (Now + TimeValue("00:00:03")) 'tempo de execução entra ações
+        'escrever a mensagem
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]").SendKeys msg1
+        Application.Wait (Now + TimeValue("00:00:04")) 'tempo de execução entra ações
+        'Enviar mensagem
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[2]").Click
+        Application.Wait (Now + TimeValue("00:00:08")) 'tempo de execução entra ações
+        'Localizar contato 2
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys atend1
+        Application.Wait (Now + TimeValue("00:00:02")) 'tempo de execução entra ações
+        'Entrar na conversa 2
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys (keys.Enter)
+        Application.Wait (Now + TimeValue("00:00:03")) 'tempo de execução entra ações
+        'escrever a mensagem 2
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]").SendKeys msg2
+        Application.Wait (Now + TimeValue("00:00:04")) 'tempo de execução entra ações
+        'Enviar mensagem 2
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[2]").Click
+        Application.Wait (Now + TimeValue("00:00:08")) 'tempo de execução entra ações
+        'Localizar contato 3
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys atend2
+        Application.Wait (Now + TimeValue("00:00:02")) 'tempo de execução entra ações
+        'Entrar na conversa 3
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys (keys.Enter)
+        Application.Wait (Now + TimeValue("00:00:03")) 'tempo de execução entra ações
+        'escrever a mensagem 3
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]").SendKeys msg3
+        Application.Wait (Now + TimeValue("00:00:04")) 'tempo de execução entra ações
+        'Enviar mensagem 3
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[2]").Click
+        Application.Wait (Now + TimeValue("00:00:08")) 'tempo de execução entra ações
+        'Localizar contato 4
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys atend3
+        Application.Wait (Now + TimeValue("00:00:02")) 'tempo de execução entra ações
+        'Entrar na conversa 4
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[3]/div/div[1]/div/label/div/div[2]").SendKeys (keys.Enter)
+        Application.Wait (Now + TimeValue("00:00:03")) 'tempo de execução entra ações
+        'escrever a mensagem 4
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]").SendKeys msg4
+        Application.Wait (Now + TimeValue("00:00:04")) 'tempo de execução entra ações
+        'Enviar mensagem 4
+        .FindElementByXPath("/html/body/div[1]/div[1]/div[1]/div[4]/div[1]/footer/div[1]/div/span[2]/div/div[2]/div[2]").Click
+        Application.Wait (Now + TimeValue("00:00:08")) 'tempo de execução entra ações
+
+        .Get URL2
+        Application.Wait (Now + TimeValue("00:00:07")) 'espera do SED carregar
+        'procurar por nº da classe
+        .FindElementByXPath("/html/body/div/main/div[1]/form/div/div/div/fieldset/div[3]/div/div/input").SendKeys classe
+        Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+        'selecionar a sala
+        .FindElementByXPath("/html/body/div/main/div[1]/form/div/div/div/fieldset/div[3]/div/div/input").SendKeys (keys.Enter)
+        Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+        'entrar na sala
+        .FindElementByXPath("/html/body/div/main/div[2]/div/div/div[3]/div/div/table/tbody/tr/td[14]/a/i").Click
+        Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+        'abrir opcao de adicionar
+        .FindElementByCss("#btnAdicionarAluno").Click
+        Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+        'incluir ra
+        .FindElementByCss("#txtNumeroRA").SendKeys ra
+        Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+        'procurar aluno
+        .FindElementByCss("#txtNumeroRA").SendKeys (keys.Tab)
+        Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+
+        If .FindElementsByClass("msg-central-mensagem").Count = 1 Then
+            .Get URL3
+            Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+            'nova inscrição
+            .FindElementByXPath("/html/body/div/main/div[1]/form/div/div/div/fieldset/div[1]/button[1]").Click
+            Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+            'incluir ra
+            .FindElementByCss("#numeroRAPesquisar").SendKeys ra
+            Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+            'sair ra
+            .FindElementByCss("#numeroRAPesquisar").SendKeys (keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'selecionar digito
+            .FindElementByCss("#digitoRAPesquisar").SendKeys dg
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'incluir digito
+            .FindElementByCss("#digitoRAPesquisar").SendKeys (keys.Enter)
+            Application.Wait (Now + TimeValue("00:00:10")) 'espera do SED carregar
+            'escolher ano letivo
+            .FindElementByCss("#anoLetivoInscricao").SendKeys (keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:04")) 'espera do SED carregar
+            'escolher diretoria
+            .FindElementByCss("#codigoDiretoriaInscricao").SendKeys (keys.ArrowDown + keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:04")) 'espera do SED carregar
+            'municipio
+            .FindElementByCss("#codigoMunicipioInscricao").SendKeys (keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:02")) 'espera do SED carregar
+            'fase
+            .FindElementByCss("#codigoFaseInscricao").SendKeys (keys.ArrowDown + keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'rede de ensino
+            .FindElementByCss("#codigoRedeEnsinoInscricao").SendKeys (keys.ArrowDown)
+            Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+            .FindElementByCss("#codigoRedeEnsinoInscricao").SendKeys (keys.ArrowDown + keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'escola
+            .FindElementByCss("#codigoEscolaInscricao").SendKeys (keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'unidade
+            .FindElementByCss("#codigoUnidadeInscricao").SendKeys (keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'tipo de ensino
+            .FindElementByCss("#codigoTipoEnsinoInscricao").SendKeys (keys.ArrowDown)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            .FindElementByCss("#codigoTipoEnsinoInscricao").SendKeys (keys.ArrowDown)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            .FindElementByCss("#codigoTipoEnsinoInscricao").SendKeys (keys.ArrowDown + keys.Tab)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'serie
+            'FindElementByXPath("xpath of element").AsSelect.SelectByText ("option text")
+            .FindElementByCss("#codigoSerieAnoInscricao").Click
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            .FindElementByCss("#codigoSerieAnoInscricao").AsSelect.SelectByValue (ano)
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            .FindElementByCss("#codigoSerieAnoInscricao").Click
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+            'salvar
+            .FindElementByXPath("/html/body/div[2]/div/div/div[2]/div/div/div/form/div[2]/button[1]").SendKeys (keys.Enter)
+            Application.Wait (Now + TimeValue("00:00:09")) 'espera do SED carregar
+            .FindElementByCss("#idAlunoMec").Click
+            Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+
+            If .FindElementByCss("#idAlunoMec").Value = "0" Then
+                .FindElementByCss("#idAlunoMec").SendKeys (keys.Backspace)
+                Application.Wait (Now + TimeValue("00:00:03")) 'espera do SED carregar
+                'inscrever
+                .FindElementByXPath("/html/body/div[3]/div/div/div[3]/button").Click
+                Application.Wait (Now + TimeValue("00:00:10")) 'espera do SED carregar
+                Else
+                    'inscrever
+                    .FindElementByXPath("/html/body/div[3]/div/div/div[3]/button").Click
+                    Application.Wait (Now + TimeValue("00:00:10")) 'espera do SED carregar
+                    'voltar na matricula
+            End If
+                .Get URL2
+                Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+                'procurar por nº da classe
+                .FindElementByXPath("/html/body/div/main/div[1]/form/div/div/div/fieldset/div[3]/div/div/input").SendKeys classe
+                Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+                'selecionar a sala
+                .FindElementByXPath("/html/body/div/main/div[1]/form/div/div/div/fieldset/div[3]/div/div/input").SendKeys (keys.Enter)
+                Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+                'entrar na sala
+                .FindElementByXPath("/html/body/div/main/div[2]/div/div/div[3]/div/div/table/tbody/tr/td[14]/a/i").Click
+                Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+                'abrir opcao de adicionar
+                .FindElementByCss("#btnAdicionarAluno").Click
+                Application.Wait (Now + TimeValue("00:00:05")) 'espera do SED carregar
+                'incluir ra
+                .FindElementByCss("#txtNumeroRA").SendKeys ra
+                Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+                'procurar aluno
+                .FindElementByCss("#txtNumeroRA").SendKeys (keys.Tab)
+                Application.Wait (Now + TimeValue("00:00:06")) 'espera do SED carregar
+                'salvar
+                .FindElementByCss("#btnSalvar").Click
+                Application.Wait (Now + TimeValue("00:00:10")) 'espera do SED carregar
+            Else
+                'salvar
+                .FindElementByCss("#btnSalvar").Click
+                Application.Wait (Now + TimeValue("00:00:10")) 'espera do SED carregar
+            End If
+    End With
+End Sub
